@@ -5,55 +5,68 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.template_flo.databinding.FragmentSavedSongBinding
+import com.google.gson.Gson
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SavedSongFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SavedSongFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private var albumDatas = ArrayList<Album>()
+    lateinit var binding : FragmentSavedSongBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_saved_song, container, false)
-    }
+        binding = FragmentSavedSongBinding.inflate(inflater, container, false)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SavedSongFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SavedSongFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        albumDatas.apply{
+            add(Album("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp, Song("Butter", "방탄소년단(BTS)", 0, 60, false, "music_butter")))
+            add(Album("Lilac", "아이유 (IU)", R.drawable.img_album_exp2, Song("라일락", "아이유(IU)", 0, 60, false, "music_lilac")))
+            add(Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3, Song("Next Level", "에스파(AESPA)", 0, 60, false, "music_next")))
+            add(Album("Boy with Luv", "방탄소년단 (BTS)", R.drawable.img_album_exp4, Song("작은 것들을 위한 시", "방탄소년단(BTS)", 0, 60, false, "music_boy")))
+            add(Album("BBoom BBoom", "모모랜드 (MOMOLAND)", R.drawable.img_album_exp5, Song("뿜뿜", "모모랜드(MOMOLAND)", 0, 60, false, "music_bboom")))
+            add(Album("Weekend", "태연 (TaeYeon)", R.drawable.img_album_exp6, Song("Weekend", "태연(TaeYeon)", 0, 60, false, "music_flu")))
+            add(Album("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp, Song("Butter", "방탄소년단(BTS)", 0, 60, false, "music_butter")))
+            add(Album("Lilac", "아이유 (IU)", R.drawable.img_album_exp2, Song("라일락", "아이유(IU)", 0, 60, false, "music_lilac")))
+            add(Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3, Song("Next Level", "에스파(AESPA)", 0, 60, false, "music_next")))
+            add(Album("Boy with Luv", "방탄소년단 (BTS)", R.drawable.img_album_exp4, Song("작은 것들을 위한 시", "방탄소년단(BTS)", 0, 60, false, "music_boy")))
+            add(Album("BBoom BBoom", "모모랜드 (MOMOLAND)", R.drawable.img_album_exp5, Song("뿜뿜", "모모랜드(MOMOLAND)", 0, 60, false, "music_bboom")))
+            add(Album("Weekend", "태연 (TaeYeon)", R.drawable.img_album_exp6, Song("Weekend", "태연(TaeYeon)", 0, 60, false, "music_flu")))
+            add(Album("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp, Song("Butter", "방탄소년단(BTS)", 0, 60, false, "music_butter")))
+            add(Album("Lilac", "아이유 (IU)", R.drawable.img_album_exp2, Song("라일락", "아이유(IU)", 0, 60, false, "music_lilac")))
+            add(Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3, Song("Next Level", "에스파(AESPA)", 0, 60, false, "music_next")))
+            add(Album("Boy with Luv", "방탄소년단 (BTS)", R.drawable.img_album_exp4, Song("작은 것들을 위한 시", "방탄소년단(BTS)", 0, 60, false, "music_boy")))
+            add(Album("BBoom BBoom", "모모랜드 (MOMOLAND)", R.drawable.img_album_exp5, Song("뿜뿜", "모모랜드(MOMOLAND)", 0, 60, false, "music_bboom")))
+            add(Album("Weekend", "태연 (TaeYeon)", R.drawable.img_album_exp6, Song("Weekend", "태연(TaeYeon)", 0, 60, false, "music_flu")))
+        }
+
+        val savedSongRVAdpater = SavedSongRVAdapter(albumDatas)
+        binding.savedSongRv.adapter = savedSongRVAdpater
+        binding.savedSongRv.layoutManager = LinearLayoutManager(requireActivity())
+
+        savedSongRVAdpater.setItemClickListener(object: SavedSongRVAdapter.OnItemClickListener {
+            override fun onItemClick(album: Album) {
+                (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, AlbumFragment().apply {
+                    arguments = Bundle().apply {
+                        val gson = Gson()
+                        val albumJson = gson.toJson(album)
+                        putString("album", albumJson)
+                    }
+                }).commitAllowingStateLoss()
             }
+
+            override fun onRemoveAlbum(position: Int) {
+                savedSongRVAdpater.removeItem(position)
+            }
+
+        })
+
+        return binding.root
     }
 }
