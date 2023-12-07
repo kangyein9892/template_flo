@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "145529623482",
+    "project_id": "template-flo",
+    "storage_bucket": "template-flo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145529623482:android:04ae1312cbccc1971f0383",
+        "android_client_info": {
+          "package_name": "com.example.template_flo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPwpdd0UydWQXatZYEWAlhihMWiZSGXtY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
