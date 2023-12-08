@@ -17,7 +17,7 @@ class HomeFragment : Fragment(), SendInterface
 {
 
     lateinit var binding: FragmentHomeBinding
-    lateinit var songDB: SongDatabase
+    private lateinit var songDB: SongDatabase
     private var albumDatas = ArrayList<Album>()
 
     private val timer = Timer()
@@ -49,7 +49,7 @@ class HomeFragment : Fragment(), SendInterface
             add(Album("Weekend", "태연 (TaeYeon)", R.drawable.img_album_exp6, Song("Weekend", "태연(TaeYeon)", 0, 60, false, "music_flu")))
         }*/
 
-        inputDummyAlbums()
+        // inputDummyAlbums()
 
         songDB = SongDatabase.getInstance(requireContext())!!
         albumDatas.addAll(songDB.albumDao().getAlbums())
